@@ -1,10 +1,10 @@
 package ru.donorsearch.backend.controller.dto;
 
 public class LoginResponse {
-    private String token;
+    private String msg;
 
-    public LoginResponse(String token) {
-        this.token = token;
+    public LoginResponse(String msg) {
+        this.msg = msg;
     }
 
     public LoginResponse() {
@@ -12,11 +12,11 @@ public class LoginResponse {
 
 
     public String getToken() {
-        return token;
+        return msg;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setToken(String msg) {
+        this.msg = msg;
     }
 
 }

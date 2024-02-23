@@ -1,6 +1,7 @@
 package ru.donorsearch.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,13 +39,11 @@ public class AuthService {
     }
 
     public ResponseEntity<LoginResponse> login(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
-        MultiValueMap<String, String> params = new HttpHeaders();
         String token = authHttpClient.loginClient(request);
-        params.add("token", authHttpClient.loginClient(request));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, "token=" + token);
 
-        LoginResponse response = new LoginResponse(token);
-
-        return new ResponseEntity<>(response, params, HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(token), headers, HttpStatus.OK);
     }
 
 
