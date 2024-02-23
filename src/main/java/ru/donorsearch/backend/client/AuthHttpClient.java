@@ -55,11 +55,13 @@ public class AuthHttpClient {
         httpPost.setHeader("Content-Type", "application/json");
 
         String requestJson = objectMapper.writeValueAsString(request);
+        logger.info(requestJson);
         httpPost.setEntity(new StringEntity(requestJson));
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + REG_URI);
+            logger.info("Retrieve response from: {}", REG_URI);
+            logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("user_id").asLong();
@@ -68,7 +70,7 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + REG_URI);
+            logger.error("Error occurred with send POST to: {}", REG_URI);
             throw new RuntimeException(e);
         }
     }
@@ -84,6 +86,7 @@ public class AuthHttpClient {
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
             logger.info("Retrieve response from: " + LOGIN_URI);
+            logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 Header[] headers = response.getAllHeaders();
                 for (Header header : headers) {
@@ -111,7 +114,8 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + CONFIRM_EMAIL_URI);
+            logger.info("Retrieve response from: {}", CONFIRM_EMAIL_URI);
+            logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
@@ -134,7 +138,8 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + CONFIRM_PHONE_URI);
+            logger.info("Retrieve response from: {}", CONFIRM_PHONE_URI);
+            logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
@@ -143,7 +148,7 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + CONFIRM_PHONE_URI);
+            logger.error("Error occurred with send POST to: {}", CONFIRM_PHONE_URI);
             throw new RuntimeException(e);
         }
     }

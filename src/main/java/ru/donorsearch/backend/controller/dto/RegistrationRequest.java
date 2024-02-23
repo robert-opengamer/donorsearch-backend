@@ -1,7 +1,11 @@
 package ru.donorsearch.backend.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.donorsearch.backend.config.RegistrationSerializer;
 
+@JsonSerialize(using = RegistrationSerializer.class)
 public class RegistrationRequest {
     private String login;
     @JsonProperty("first_name")
