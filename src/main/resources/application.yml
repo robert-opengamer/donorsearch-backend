@@ -10,6 +10,9 @@ spring:
       ddl-auto: update
     show-sql: true
   data:
+    bot:
+      token: "6628063981:AAEUuBlxYOGwPrJyvoi3R0_COaF6O4kKKf0"
+      name: "donorsearch_opengamer_bot"
     auth:
       reg: "https://api2.donorsearch.org/api/auth/registration/"
       login: "https://api2.donorsearch.org/api/auth/login/"
