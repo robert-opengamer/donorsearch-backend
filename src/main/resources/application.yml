@@ -17,4 +17,5 @@ spring:
       reg: "https://api2.donorsearch.org/api/auth/registration/"
       login: "https://api2.donorsearch.org/api/auth/login/"
       confirm-email: "https://api2.donorsearch.org/api/auth/confirm_email_reg/"
+      confirm-phone: "https://api2.donorsearch.org/api/auth/confirm_phone_reg/"
 
