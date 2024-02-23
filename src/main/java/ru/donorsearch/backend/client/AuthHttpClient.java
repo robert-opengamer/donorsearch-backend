@@ -27,7 +27,7 @@ public class AuthHttpClient {
         this.objectMapper = objectMapper;
     }
 
-    public long registerClient(RegisterRequest request,
+    public long registerClient(RegistrationRequest request,
                               @Value("${spring.data.auth.reg}") String uri) throws UnsupportedEncodingException {
 
         HttpPost httpPost = new HttpPost(uri);
