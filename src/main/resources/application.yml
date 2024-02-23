@@ -1,6 +1,15 @@
 spring:
   application:
     name: donorsearch-backend
+
+  datasource:
+    url: jdbc:postgresql://192.168.0.27:5432/hackathon
+    username: nova
+    password: j0cVbLlNpuwx
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   data:
     auth:
       reg: "https://api2.donorsearch.org/api/auth/registration/"
