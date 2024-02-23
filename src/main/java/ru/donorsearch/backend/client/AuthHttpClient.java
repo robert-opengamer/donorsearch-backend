@@ -3,9 +3,11 @@ package ru.donorsearch.backend.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import org.apache.http.Header;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import ru.donorsearch.backend.controller.dto.ConfirmEmailRequest;
 import ru.donorsearch.backend.controller.dto.LoginRequest;
 import ru.donorsearch.backend.controller.dto.RegistrationRequest;
+import ru.donorsearch.backend.exceptions.AuthException;
 
 @Component
 public class AuthHttpClient {
@@ -28,18 +31,21 @@ public class AuthHttpClient {
 
     private final String LOGIN_URI;
     private final String REG_URI;
-    private final String CONFIRM_URI;
+    private final String CONFIRM_EMAIL_URI;
+    private final String CONFIRM_PHONE_URI;
 
     public AuthHttpClient(CloseableHttpClient httpClient,
                           ObjectMapper objectMapper,
                           @Value("${spring.data.auth.login}") String LOGIN_URI,
                           @Value("${spring.data.auth.reg}") String REG_URI,
-                          @Value("${spring.data.auth.confirm-email}") String CONFIRM_URI) {
+                          @Value("${spring.data.auth.confirm-email}") String CONFIRM_EMAIL_URI,
+                          @Value("${spring.data.auth.confirm-phone}") String CONFIRM_PHONE_URI) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.LOGIN_URI = LOGIN_URI;
         this.REG_URI = REG_URI;
-        this.CONFIRM_URI = CONFIRM_URI;
+        this.CONFIRM_EMAIL_URI = CONFIRM_EMAIL_URI;
+        this.CONFIRM_PHONE_URI = CONFIRM_PHONE_URI;
     }
 
     public long registerClient(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
@@ -57,7 +63,7 @@ public class AuthHttpClient {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("user_id").asLong();
             } else {
-                return -1;
+                throw new BadRequestException("Bad Request (Invalid email/phone)");
             }
 
         } catch (IOException e) {
@@ -85,19 +91,18 @@ public class AuthHttpClient {
                     }
                 }
             } else {
-                return null;
+                throw new AuthException("Invalid login or password");
             }
 
         } catch (IOException e) {
             logger.error("Error occurred with send POST to: " + LOGIN_URI);
             throw new RuntimeException(e);
         }
-
-        return null;
+        throw new AuthException("Invalid login or password");
     }
 
     public long confirmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
-        HttpPost httpPost = new HttpPost(CONFIRM_URI);
+        HttpPost httpPost = new HttpPost(CONFIRM_EMAIL_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
         String requestJson = objectMapper.writeValueAsString(request);
@@ -105,7 +110,7 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + CONFIRM_URI);
+            logger.info("Retrieve response from: " + CONFIRM_EMAIL_URI);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
@@ -114,9 +119,31 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + CONFIRM_URI);
+            logger.error("Error occurred with send POST to: " + CONFIRM_EMAIL_URI);
             throw new RuntimeException(e);
         }
+    }
 
+    public long confirmPhoneClient(ConfirmPhoneRequest request) throws JsonProcessingException, UnsupportedEncodingException {
+        HttpPost httpPost = new HttpPost(CONFIRM_PHONE_URI);
+        httpPost.setHeader("Content-Type", "application/json");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+        httpPost.setEntity(new StringEntity(requestJson));
+
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            logger.info("Retrieve response from: " + CONFIRM_PHONE_URI);
+            if (statusCode == 200) {
+                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
+                return jsonNode.get("id").asLong();
+            } else {
+                return -1;
+            }
+
+        } catch (IOException e) {
+            logger.error("Error occurred with send POST to: " + CONFIRM_PHONE_URI);
+            throw new RuntimeException(e);
+        }
     }
 }
