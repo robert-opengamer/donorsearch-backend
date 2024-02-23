@@ -14,6 +14,7 @@ public class LoginRequest {
         this.chatId = chatId;
     }
 
+
     public LoginRequest() {
     }
 

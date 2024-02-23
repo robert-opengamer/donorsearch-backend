@@ -22,10 +22,10 @@ public class DonationPlanController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<DonationPlanResponse> createDonationPlan(@RequestBody DonationPlanResponse donationPlanResponse) {
-
-    }
+//    @PostMapping
+//    public ResponseEntity<DonationPlanResponse> createDonationPlan(@RequestBody DonationPlanResponse donationPlanResponse) {
+//
+//    }
 
 
 

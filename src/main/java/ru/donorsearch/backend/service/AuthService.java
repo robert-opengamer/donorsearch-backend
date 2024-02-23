@@ -117,14 +117,7 @@ public class AuthService {
             userRepo.save(newUser);
         }
 
-        Duration cookieDuration = Duration.ofHours(1);
-        ZonedDateTime expiresDateTime = ZonedDateTime.now().plus(cookieDuration);
-        String expiresFormatted = expiresDateTime.format(DateTimeFormatter.RFC_1123_DATE_TIME);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, String.format("token=%s; expires=%s", token, expiresFormatted));
-
-        return new ResponseEntity<>(new LoginResponse(token), headers, HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
     }
 
 
