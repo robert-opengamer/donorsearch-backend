@@ -1,1 +1,7 @@
-
+spring:
+  application:
+    name: donorsearch-backend
+  data:
+    auth:
+      reg: "https://api2.donorsearch.org/api/auth/registration/"
+      login: "https://api2.donorsearch.org/api/auth/login/"
