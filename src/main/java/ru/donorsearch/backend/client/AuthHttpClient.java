@@ -1,5 +1,6 @@
 package ru.donorsearch.backend.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.donorsearch.backend.controller.dto.LoginRequest;
+import ru.donorsearch.backend.controller.dto.RegistrationRequest;
 
 @Component
 public class AuthHttpClient {
@@ -28,7 +31,7 @@ public class AuthHttpClient {
     }
 
     public long registerClient(RegistrationRequest request,
-                              @Value("${spring.data.auth.reg}") String uri) throws UnsupportedEncodingException {
+                               @Value("${spring.data.auth.reg}") String uri) throws UnsupportedEncodingException, JsonProcessingException {
 
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setHeader("Content-Type", "application/json");
@@ -53,7 +56,7 @@ public class AuthHttpClient {
     }
 
     public String loginClient(LoginRequest request,
-                              @Value("${spring.data.auth.login}") String uri) throws UnsupportedEncodingException {
+                              @Value("${spring.data.auth.login}") String uri) throws UnsupportedEncodingException, JsonProcessingException {
 
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setHeader("Content-Type", "application/json");
