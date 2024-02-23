@@ -56,7 +56,7 @@ public class AuthService {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         ConfirmEmailResponse response = new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
 
-        if (response.getId() == -1) {
+        if (response.getId() != -1) {
             user.setPhoneVerified(true);
             userRepo.save(user);
         }
@@ -68,7 +68,7 @@ public class AuthService {
     public ConfirmPhoneResponse confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         ConfirmPhoneResponse response = new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
-        if (response.getId() == -1) {
+        if (response.getId() != -1) {
             user.setPhoneVerified(true);
             userRepo.save(user);
         }
