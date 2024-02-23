@@ -1,6 +1,7 @@
 package ru.donorsearch.backend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     public ResponseEntity<RegistrationResponse> registration(@RequestBody RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        System.out.println(request.getLogin());
         return new ResponseEntity<>(authService.registerUser(request), HttpStatus.OK);
     }
 
@@ -37,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws IOException {
         return authService.login(request);
     }
 
