@@ -97,7 +97,7 @@ public class AuthHttpClient {
 
     }
 
-    public long confirmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
+    public HttpResponse confirmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
         HttpPost httpPost = new HttpPost(CONFIRM_EMAIL_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
@@ -110,9 +110,10 @@ public class AuthHttpClient {
             logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
-                return jsonNode.get("id").asLong();
+
+                return response;
             } else {
-                return -1;
+                throw new AuthException("Invalid login or password");
             }
 
         } catch (IOException e) {
@@ -121,7 +122,7 @@ public class AuthHttpClient {
         }
     }
 
-    public long confirmPhoneClient(ConfirmPhoneRequest request) throws JsonProcessingException, UnsupportedEncodingException {
+    public HttpResponse confirmPhoneClient(ConfirmPhoneRequest request) throws JsonProcessingException, UnsupportedEncodingException {
         HttpPost httpPost = new HttpPost(CONFIRM_PHONE_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
@@ -134,9 +135,9 @@ public class AuthHttpClient {
             logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
-                return jsonNode.get("id").asLong();
+                return response;
             } else {
-                return -1;
+                throw new AuthException("Invalid login or password");
             }
 
         } catch (IOException e) {

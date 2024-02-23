@@ -64,27 +64,41 @@ public class AuthService {
         return response;
     }
 
-    public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+    public ResponseEntity<ResponseWithToken> confirmEmail(ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-        ConfirmEmailResponse response = new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
-
-        if (response.getId() != -1) {
-            user.setEmailVerified(true);
-            userRepo.save(user);
+        HttpResponse response = authHttpClient.confirmEmailClient(request);
+        String token = null;
+        for (Header header : response.getAllHeaders()) {
+            if (header.getName().equalsIgnoreCase("token")) {
+                token = header.getValue();
+            }
         }
 
-        return response;
+        ResponseWithToken responseWithToken = new ResponseWithToken(token);
+
+        user.setEmailVerified(true);
+        userRepo.save(user);
+
+
+        return new ResponseEntity<>(responseWithToken, HttpStatus.OK);
     }
 
-    public ConfirmPhoneResponse confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+    public ResponseEntity<ResponseWithToken> confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-        ConfirmPhoneResponse response = new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
-        if (response.getId() != -1) {
-            user.setPhoneVerified(true);
-            userRepo.save(user);
+        HttpResponse response = authHttpClient.confirmPhoneClient(request);
+        String token = null;
+        for (Header header : response.getAllHeaders()) {
+            if (header.getName().equalsIgnoreCase("token")) {
+                token = header.getValue();
+            }
         }
+        ResponseWithToken responseWithToken = new ResponseWithToken(token);
 
-        return response;
+
+        user.setPhoneVerified(true);
+        userRepo.save(user);
+
+        return new ResponseEntity<>(responseWithToken, HttpStatus.OK);
     }
 
     public ResponseEntity<LoginResponse> login(LoginRequest request) throws IOException {
@@ -116,7 +130,6 @@ public class AuthService {
             newUser.setPhoneVerified(isPhoneVerified);
             userRepo.save(newUser);
         }
-
         return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
     }
 

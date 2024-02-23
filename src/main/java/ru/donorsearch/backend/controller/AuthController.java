@@ -29,13 +29,13 @@ public class AuthController {
     }
 
     @PostMapping("/confirm_email_reg")
-    public ResponseEntity<ConfirmEmailResponse> confirmEmailReg(@RequestBody ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
-        return new ResponseEntity<>(authService.confirmEmail(request), HttpStatus.OK);
+    public ResponseEntity<ResponseWithToken> confirmEmailReg(@RequestBody ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        return authService.confirmEmail(request);
     }
 
     @PostMapping("/confirm_phone_reg")
-    public ResponseEntity<ConfirmPhoneResponse> confirmPhoneReg(@RequestBody ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
-        return new ResponseEntity<>(authService.confirmPhone(request), HttpStatus.OK);
+    public ResponseEntity<ResponseWithToken> confirmPhoneReg(@RequestBody ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        return authService.confirmPhone(request);
     }
 
     @PostMapping("/login")
