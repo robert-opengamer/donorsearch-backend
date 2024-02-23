@@ -27,10 +27,10 @@ public class AuthController {
         return new ResponseEntity<>(authService.registerUser(request), HttpStatus.OK);
     }
 
-//    @PostMapping("/confirm_email_reg")
-//    public ResponseEntity<ConfirmEmailResponse> confirmEmailReg(@RequestBody ConfirmEmailRequest request) {
-//        return new ResponseEntity<>(authService.confirmEmail(request), HttpStatus.OK);
-//    }
+    @PostMapping("/confirm_email_reg")
+    public ResponseEntity<ConfirmEmailResponse> confirmEmailReg(@RequestBody ConfirmEmailRequest request) {
+        return new ResponseEntity<>(authService.confirmEmail(request), HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
