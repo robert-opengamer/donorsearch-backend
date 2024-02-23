@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.donorsearch.backend.controller.dto.ConfirmEmailRequest;
 import ru.donorsearch.backend.controller.dto.LoginRequest;
 import ru.donorsearch.backend.controller.dto.RegistrationRequest;
 
@@ -27,15 +28,18 @@ public class AuthHttpClient {
 
     private final String LOGIN_URI;
     private final String REG_URI;
+    private final String CONFIRM_URI
 
     public AuthHttpClient(CloseableHttpClient httpClient,
                           ObjectMapper objectMapper,
                           @Value("${spring.data.auth.login}") String LOGIN_URI,
-                          @Value("${spring.data.auth.reg}") String REG_URI) {
+                          @Value("${spring.data.auth.reg}") String REG_URI,
+                          @Value("${spring.data.auth.confirm-email}") String CONFIRM_URI) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.LOGIN_URI = LOGIN_URI;
         this.REG_URI = REG_URI;
+        this.CONFIRM_URI = CONFIRM_URI;
     }
 
     public long registerClient(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
@@ -90,5 +94,29 @@ public class AuthHttpClient {
         }
 
         return null;
+    }
+
+    public long configrmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
+        HttpPost httpPost = new HttpPost(CONFIRM_URI);
+        httpPost.setHeader("Content-Type", "application/json");
+
+        String requestJson = objectMapper.writeValueAsString(request);
+        httpPost.setEntity(new StringEntity(requestJson));
+
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            logger.info("Retrieve response from: " + LOGIN_URI);
+            if (statusCode == 200) {
+                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
+                return jsonNode.get("id").asLong();
+            } else {
+                return -1;
+            }
+
+        } catch (IOException e) {
+            logger.error("Error occurred with send POST to: " + LOGIN_URI);
+            throw new RuntimeException(e);
+        }
+
     }
 }
