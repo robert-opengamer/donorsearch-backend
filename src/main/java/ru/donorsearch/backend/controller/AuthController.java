@@ -31,6 +31,11 @@ public class AuthController {
         return new ResponseEntity<>(authService.confirmEmail(request), HttpStatus.OK);
     }
 
+    @PostMapping("/confirm_phone_reg")
+    public ResponseEntity<ConfirmPhoneResponse> confirmPhoneReg(@RequestBody ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        return new ResponseEntity<>(authService.confirmPhone(request), HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         return authService.login(request);

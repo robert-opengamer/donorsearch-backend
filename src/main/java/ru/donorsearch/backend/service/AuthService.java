@@ -1,25 +1,26 @@
 package ru.donorsearch.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.Cookie;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import ru.donorsearch.backend.client.AuthHttpClient;
 import ru.donorsearch.backend.controller.dto.*;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.UserRepo;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
+
+    private final Pattern pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
 
     private final AuthHttpClient authHttpClient;
 
@@ -32,13 +33,30 @@ public class AuthService {
     }
 
     public RegistrationResponse registerUser(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        User user = new User();
+        user.setPhoneVerified(false);
+        user.setEmailVerified(false);
         RegistrationResponse response = new RegistrationResponse(authHttpClient.registerClient(request));
-        userRepo.save(new User(response.getId(), request.getEmail()));
+        user.setId(response.getId());
+        if (pattern.matcher(request.getLogin()).matches()) {
+            user.setEmail(request.getLogin());
+            user.setPhoneNumber(null);
+        } else {
+            user.setPhoneNumber(request.getLogin());
+            user.setEmail(null);
+        }
+
+        userRepo.save(user);
         return response;
     }
 
+
     public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         return new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
+    }
+
+    public ConfirmPhoneResponse confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        return new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
     }
 
     public ResponseEntity<LoginResponse> login(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
