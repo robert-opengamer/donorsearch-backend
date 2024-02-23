@@ -105,7 +105,7 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + LOGIN_URI);
+            logger.info("Retrieve response from: " + CONFIRM_URI);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
@@ -114,7 +114,7 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + LOGIN_URI);
+            logger.error("Error occurred with send POST to: " + CONFIRM_URI);
             throw new RuntimeException(e);
         }
 
