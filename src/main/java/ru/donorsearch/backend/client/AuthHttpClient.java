@@ -7,6 +7,7 @@ import jakarta.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -75,36 +76,25 @@ public class AuthHttpClient {
         }
     }
 
-    public String loginClient(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+    public HttpResponse loginClient(LoginRequest request) throws IOException {
 
         HttpPost httpPost = new HttpPost(LOGIN_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
         String requestJson = objectMapper.writeValueAsString(request);
         httpPost.setEntity(new StringEntity(requestJson));
-
-        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-            int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + LOGIN_URI);
-            logger.info(response.toString());
-            logger.info(requestJson);
-            logger.info("Status code: {}", statusCode);
-            if (statusCode == 200) {
-                Header[] headers = response.getAllHeaders();
-                for (Header header : headers) {
-                    if (header.getName().equalsIgnoreCase("token")) {
-                        return header.getValue();
-                    }
-                }
-            } else {
-                throw new AuthException("Invalid login or password");
-            }
-
-        } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + LOGIN_URI);
-            throw new RuntimeException(e);
+        HttpResponse response = httpClient.execute(httpPost);
+        int statusCode = response.getStatusLine().getStatusCode();
+        logger.info("Retrieve response from: " + LOGIN_URI);
+        logger.info(response.toString());
+        logger.info(requestJson);
+        logger.info("Status code: {}", statusCode);
+        if (statusCode == 200) {
+            return response;
+        } else {
+            throw new AuthException("Invalid login or password");
         }
-        throw new AuthException("Invalid login or password");
+
     }
 
     public long confirmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {

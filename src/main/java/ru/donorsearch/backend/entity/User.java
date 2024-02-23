@@ -1,5 +1,6 @@
 package ru.donorsearch.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,15 +10,17 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     private Long id;
-
+    @JsonProperty("chat_id")
+    private Long chatId;
     private String email;
     private String phoneNumber;
-
     private Boolean phoneVerified;
     private Boolean emailVerified;
 
-    public User(Long id, String email, String phoneNumber, Boolean phoneVerified, Boolean emailVerified) {
+
+    public User(Long id, Long chatId, String email, String phoneNumber, Boolean phoneVerified, Boolean emailVerified) {
         this.id = id;
+        this.chatId = chatId;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.phoneVerified = phoneVerified;
@@ -65,5 +68,13 @@ public class User {
 
     public void setEmailVerified(Boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 }
