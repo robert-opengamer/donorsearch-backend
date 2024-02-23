@@ -109,8 +109,6 @@ public class AuthHttpClient {
             logger.info("Retrieve response from: {}", CONFIRM_EMAIL_URI);
             logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
-                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
-
                 return response;
             } else {
                 throw new AuthException("Invalid login or password");
@@ -134,7 +132,6 @@ public class AuthHttpClient {
             logger.info("Retrieve response from: {}", CONFIRM_PHONE_URI);
             logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
-                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return response;
             } else {
                 throw new AuthException("Invalid login or password");
