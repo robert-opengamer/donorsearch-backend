@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.donorsearch.backend.controller.dto.ConfirmEmailRequest;
+import ru.donorsearch.backend.controller.dto.ConfirmPhoneRequest;
 import ru.donorsearch.backend.controller.dto.LoginRequest;
 import ru.donorsearch.backend.controller.dto.RegistrationRequest;
 import ru.donorsearch.backend.exceptions.AuthException;

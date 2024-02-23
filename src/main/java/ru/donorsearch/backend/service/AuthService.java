@@ -35,9 +35,7 @@ public class AuthService {
     public RegistrationResponse registerUser(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         User user = new User();
         user.setPhoneVerified(false);
-        user.setEmailVerified(false);
-        RegistrationResponse response = new RegistrationResponse(authHttpClient.registerClient(request));
-        user.setId(response.getId());
+        user.setEmailVerified(false);;
         if (pattern.matcher(request.getLogin()).matches()) {
             user.setEmail(request.getLogin());
             user.setPhoneNumber(null);
@@ -45,6 +43,9 @@ public class AuthService {
             user.setPhoneNumber(request.getLogin());
             user.setEmail(null);
         }
+        RegistrationResponse response = new RegistrationResponse(authHttpClient.registerClient(request));
+        user.setId(response.getId());
+
 
         userRepo.save(user);
         return response;
@@ -52,11 +53,25 @@ public class AuthService {
 
 
     public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
-        return new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
+        User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        ConfirmEmailResponse response = new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
+
+        user.setEmailVerified(true);
+        userRepo.delete(user);
+        userRepo.save(user);
+
+        return response;
     }
 
     public ConfirmPhoneResponse confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
-        return new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
+        User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        ConfirmPhoneResponse response = new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
+
+        user.setPhoneVerified(true);
+        userRepo.delete(user);
+        userRepo.save(user);
+
+        return response;
     }
 
     public ResponseEntity<LoginResponse> login(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
