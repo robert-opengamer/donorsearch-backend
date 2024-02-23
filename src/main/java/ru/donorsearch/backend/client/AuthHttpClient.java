@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -73,8 +74,12 @@ public class AuthHttpClient {
             int statusCode = response.getStatusLine().getStatusCode();
             logger.info("Retrieve response from: " + LOGIN_URI);
             if (statusCode == 200) {
-                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
-                return jsonNode.get("token").asText();
+                Header[] headers = response.getAllHeaders();
+                for (Header header : headers) {
+                    if (header.getName().equalsIgnoreCase("token")) {
+                        return header.getValue();
+                    }
+                }
             } else {
                 return null;
             }
@@ -83,5 +88,7 @@ public class AuthHttpClient {
             logger.error("Error occurred with send POST to: " + LOGIN_URI);
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 }
