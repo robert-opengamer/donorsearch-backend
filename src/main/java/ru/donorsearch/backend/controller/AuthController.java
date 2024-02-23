@@ -4,15 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.donorsearch.backend.controller.dto.*;
 import ru.donorsearch.backend.service.AuthService;
 
 import java.io.UnsupportedEncodingException;
 
-@RestController("/api/auth")
+@RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -28,13 +27,18 @@ public class AuthController {
     }
 
     @PostMapping("/confirm_email_reg")
-    public ResponseEntity<ConfirmEmailResponse> confirmEmailReg(@RequestBody ConfirmEmailRequest request) {
+    public ResponseEntity<ConfirmEmailResponse> confirmEmailReg(@RequestBody ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         return new ResponseEntity<>(authService.confirmEmail(request), HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         return authService.login(request);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "OK";
     }
 
 

@@ -33,15 +33,16 @@ public class AuthService {
         return response;
     }
 
-    public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) {
-
+    public ConfirmEmailResponse confirmEmail(ConfirmEmailRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        return new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
     }
 
     public ResponseEntity<LoginResponse> login(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         MultiValueMap<String, String> params = new HttpHeaders();
+        String token = authHttpClient.loginClient(request);
         params.add("token", authHttpClient.loginClient(request));
 
-        LoginResponse response = new LoginResponse("ASD");
+        LoginResponse response = new LoginResponse(token);
 
         return new ResponseEntity<>(response, params, HttpStatus.OK);
     }

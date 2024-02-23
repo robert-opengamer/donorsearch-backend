@@ -28,7 +28,7 @@ public class AuthHttpClient {
 
     private final String LOGIN_URI;
     private final String REG_URI;
-    private final String CONFIRM_URI
+    private final String CONFIRM_URI;
 
     public AuthHttpClient(CloseableHttpClient httpClient,
                           ObjectMapper objectMapper,
@@ -96,7 +96,7 @@ public class AuthHttpClient {
         return null;
     }
 
-    public long configrmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
+    public long confirmEmailClient(ConfirmEmailRequest request) throws JsonProcessingException, UnsupportedEncodingException {
         HttpPost httpPost = new HttpPost(CONFIRM_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
