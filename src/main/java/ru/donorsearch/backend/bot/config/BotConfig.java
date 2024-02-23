@@ -13,7 +13,7 @@ public class BotConfig {
     @Value("${spring.data.bot.name}")
     String botName;
 
-    @Value("${spring.data.bot.key}")
+    @Value("${spring.data.bot.token}")
     String token;
 
 }
