@@ -38,14 +38,15 @@ public class AuthService {
         user.setPhoneVerified(false);
         user.setEmailVerified(false);;
         if (pattern.matcher(request.getLogin()).matches()) {
+            response.setType("email");
             user.setEmail(request.getLogin());
             user.setPhoneNumber(null);
         } else {
+            response.setType("phone");
             user.setPhoneNumber(request.getLogin());
             user.setEmail(null);
         }
         user.setId(response.getId());
-
 
         userRepo.save(user);
         return response;
