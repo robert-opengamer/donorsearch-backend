@@ -24,16 +24,22 @@ public class AuthHttpClient {
     private final CloseableHttpClient httpClient;
     private final ObjectMapper objectMapper;
 
+    private final String LOGIN_URI;
+    private final String REG_URI;
+
     public AuthHttpClient(CloseableHttpClient httpClient,
-                          ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper,
+                          @Value("${spring.data.auth.login}") String LOGIN_URI,
+                          @Value("${spring.data.auth.reg}") String REG_URI) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
+        this.LOGIN_URI = LOGIN_URI;
+        this.REG_URI = REG_URI;
     }
 
-    public long registerClient(RegistrationRequest request,
-                               @Value("${spring.data.auth.reg}") String uri) throws UnsupportedEncodingException, JsonProcessingException {
+    public long registerClient(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
 
-        HttpPost httpPost = new HttpPost(uri);
+        HttpPost httpPost = new HttpPost(REG_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
         String requestJson = objectMapper.writeValueAsString(request);
@@ -41,7 +47,7 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + uri);
+            logger.info("Retrieve response from: " + REG_URI);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("user_id").asLong();
@@ -50,15 +56,14 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + uri);
+            logger.error("Error occurred with send POST to: " + REG_URI);
             throw new RuntimeException(e);
         }
     }
 
-    public String loginClient(LoginRequest request,
-                              @Value("${spring.data.auth.login}") String uri) throws UnsupportedEncodingException, JsonProcessingException {
+    public String loginClient(LoginRequest request) throws UnsupportedEncodingException, JsonProcessingException {
 
-        HttpPost httpPost = new HttpPost(uri);
+        HttpPost httpPost = new HttpPost(LOGIN_URI);
         httpPost.setHeader("Content-Type", "application/json");
 
         String requestJson = objectMapper.writeValueAsString(request);
@@ -66,7 +71,7 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: " + uri);
+            logger.info("Retrieve response from: " + LOGIN_URI);
             if (statusCode == 200) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("token").asText();
@@ -75,7 +80,7 @@ public class AuthHttpClient {
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: " + uri);
+            logger.error("Error occurred with send POST to: " + LOGIN_URI);
             throw new RuntimeException(e);
         }
     }
