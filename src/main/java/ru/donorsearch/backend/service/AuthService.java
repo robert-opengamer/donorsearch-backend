@@ -57,7 +57,7 @@ public class AuthService {
         ConfirmEmailResponse response = new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
 
         if (response.getId() != -1) {
-            user.setPhoneVerified(true);
+            user.setEmailVerified(true);
             userRepo.save(user);
         }
 

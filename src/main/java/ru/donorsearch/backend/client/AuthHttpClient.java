@@ -86,6 +86,8 @@ public class AuthHttpClient {
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
             logger.info("Retrieve response from: " + LOGIN_URI);
+            logger.info(response.toString());
+            logger.info(requestJson);
             logger.info("Status code: {}", statusCode);
             if (statusCode == 200) {
                 Header[] headers = response.getAllHeaders();
