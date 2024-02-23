@@ -33,6 +33,7 @@ public class AuthService {
     }
 
     public RegistrationResponse registerUser(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
+        RegistrationResponse response = new RegistrationResponse(authHttpClient.registerClient(request));
         User user = new User();
         user.setPhoneVerified(false);
         user.setEmailVerified(false);;
@@ -43,7 +44,6 @@ public class AuthService {
             user.setPhoneNumber(request.getLogin());
             user.setEmail(null);
         }
-        RegistrationResponse response = new RegistrationResponse(authHttpClient.registerClient(request));
         user.setId(response.getId());
 
 
@@ -56,9 +56,11 @@ public class AuthService {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         ConfirmEmailResponse response = new ConfirmEmailResponse(authHttpClient.confirmEmailClient(request));
 
-        user.setEmailVerified(true);
-        userRepo.delete(user);
-        userRepo.save(user);
+        if (response.getId() == -1) {
+            user.setPhoneVerified(true);
+            userRepo.save(user);
+        }
+
 
         return response;
     }
@@ -66,10 +68,11 @@ public class AuthService {
     public ConfirmPhoneResponse confirmPhone(ConfirmPhoneRequest request) throws UnsupportedEncodingException, JsonProcessingException {
         User user = userRepo.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         ConfirmPhoneResponse response = new ConfirmPhoneResponse(authHttpClient.confirmPhoneClient(request));
+        if (response.getId() == -1) {
+            user.setPhoneVerified(true);
+            userRepo.save(user);
+        }
 
-        user.setPhoneVerified(true);
-        userRepo.delete(user);
-        userRepo.save(user);
 
         return response;
     }
