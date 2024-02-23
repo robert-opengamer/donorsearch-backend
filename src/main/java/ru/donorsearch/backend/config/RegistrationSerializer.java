@@ -30,6 +30,7 @@ public class RegistrationSerializer extends JsonSerializer<RegistrationRequest> 
     }
 
     private boolean isPhoneNumber(String login) {
-        return login.matches("\\d{11}");
+        return login.matches("(\\+?\\d{11}|\\d{11})");
     }
+
 }

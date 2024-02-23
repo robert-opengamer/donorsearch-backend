@@ -61,7 +61,6 @@ public class AuthService {
             userRepo.save(user);
         }
 
-
         return response;
     }
 
@@ -72,7 +71,6 @@ public class AuthService {
             user.setPhoneVerified(true);
             userRepo.save(user);
         }
-
 
         return response;
     }
