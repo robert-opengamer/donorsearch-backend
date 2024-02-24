@@ -1,7 +1,6 @@
 package ru.donorsearch.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class DonationPlan {
@@ -14,6 +13,10 @@ public class DonationPlan {
     private String planDate;
     private String paymentType;
     private boolean isOut;
+
+    @ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 
     public DonationPlan(long id, int bloodStationId, int cityId, String bloodClass, String planDate, String paymentType, boolean isOut) {
         this.id = id;
@@ -74,6 +77,14 @@ public class DonationPlan {
 
     public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public boolean isOut() {
