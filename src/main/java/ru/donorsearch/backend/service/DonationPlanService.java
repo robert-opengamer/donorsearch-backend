@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.donorsearch.backend.client.AuthHttpClient;
 import ru.donorsearch.backend.client.DonationHttpClient;
@@ -20,6 +21,7 @@ import ru.donorsearch.backend.repository.DonationPlanRepo;
 import ru.donorsearch.backend.repository.UserRepo;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @Service
 public class DonationPlanService {
@@ -97,6 +99,17 @@ public class DonationPlanService {
         String address = cityTitle + ", " + station.getAddress();
         logger.info(address);
         return address;
+    }
+
+    @Scheduled(cron = "59 23 * * * *")
+    public void updateDonationPlans() {
+        LocalDate currentDate = LocalDate.now();
+
+        String date = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        List<DonationPlan> donationPlans = donationPlanRepository.findDonationPlansByPlanDate(date);
+
+        donationPlanRepository.deleteAll(donationPlans);
     }
 
 }
