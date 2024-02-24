@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 })
 public class DonationPlanDTO {
-    @JsonProperty("blood_station")
+    @JsonProperty("blood_station_id")
     private int bloodStationId;
 
     @JsonProperty("city_id")
