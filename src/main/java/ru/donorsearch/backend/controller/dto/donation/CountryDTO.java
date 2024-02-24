@@ -1,14 +1,31 @@
 package ru.donorsearch.backend.controller.dto.donation;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
-@RequiredArgsConstructor
-@Getter
-@Setter
 public class CountryDTO {
     private int id;
     private String title;
+
+    public CountryDTO(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    public CountryDTO() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
 
