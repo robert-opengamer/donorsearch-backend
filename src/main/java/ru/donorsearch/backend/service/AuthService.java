@@ -81,6 +81,7 @@ public class AuthService {
         ResponseWithToken responseWithToken = new ResponseWithToken(token);
 
         user.setEmailVerified(true);
+        user.setChatId(request.getChatId());
         userRepo.save(user);
 
 
@@ -100,6 +101,7 @@ public class AuthService {
 
 
         user.setPhoneVerified(true);
+        user.setChatId(request.getChatId());
         userRepo.save(user);
 
         return new ResponseEntity<>(responseWithToken, HttpStatus.OK);

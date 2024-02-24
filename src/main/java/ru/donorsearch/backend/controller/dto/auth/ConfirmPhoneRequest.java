@@ -5,18 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ConfirmPhoneRequest {
     @JsonProperty("user_id")
     private Long userId;
-
     private String phone;
-
     private String code;
+    @JsonProperty("chat_id")
+    private long chatId;
 
-    public ConfirmPhoneRequest(Long userId, String phone, String code) {
+    public ConfirmPhoneRequest(Long userId, String phone, String code, long chatId) {
         this.userId = userId;
         this.phone = phone;
         this.code = code;
+        this.chatId = chatId;
     }
 
     public ConfirmPhoneRequest() {
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
     }
 
     public Long getUserId() {

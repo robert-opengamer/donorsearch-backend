@@ -79,15 +79,8 @@ public class DonationPlanService {
         return new ResponseEntity<>(statusResponse, HttpStatus.OK);
     }
 
-    /*public ResponseEntity<StatusResponse> updateDonationPlan(String token, DonationPlanResponse donationPlanResponse) {
-
-    }
-
-    public ResponseEntity<StatusResponse> getDonationPlan(String token, DonationPlanResponse donationPlanResponse) {
-
-    }*/
-
     private String convertDate(String inputDate) {
+        logger.info(inputDate);
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate date = LocalDate.parse(inputDate, inputFormatter);
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
