@@ -13,14 +13,17 @@ public class DonationPlan {
     private String planDate;
     private String paymentType;
     private boolean isOut;
-
-    private String station;
+    private String address;
+    private String workPhones;
+    private String workTime;
 
     @ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public DonationPlan(long id, int bloodStationId, int cityId, String bloodClass, String planDate, String paymentType, boolean isOut, String station) {
+    public DonationPlan(long id, int bloodStationId, int cityId,
+                        String bloodClass, String planDate, String paymentType,
+                        boolean isOut, String address, String workPhones, String workTime) {
         this.id = id;
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
@@ -28,18 +31,36 @@ public class DonationPlan {
         this.planDate = planDate;
         this.paymentType = paymentType;
         this.isOut = isOut;
-        this.station = station;
+        this.address = address;
+        this.workPhones = workPhones;
+        this.workTime = workTime;
     }
 
     public DonationPlan() {
     }
 
-    public String getStation() {
-        return station;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStation(String station) {
-        this.station = station;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWorkPhones() {
+        return workPhones;
+    }
+
+    public void setWorkPhones(String workPhones) {
+        this.workPhones = workPhones;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
 
     public long getId() {

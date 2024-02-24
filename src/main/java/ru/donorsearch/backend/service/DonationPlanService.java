@@ -50,10 +50,17 @@ public class DonationPlanService {
         Long id = donationHttpClient.createDonationPlanAndGetId(donationPlanDTO, token);
         StatusResponse statusResponse = new StatusResponse("OK");
 
-        DonationPlan donationPlan = new DonationPlan(id, donationPlanDTO.getBloodStationId(),
-                donationPlanDTO.getCityId(), donationPlanDTO.getBloodClass(),
-                donationPlanDTO.getPlanDate(), donationPlanDTO.getPaymentType(),
-                donationPlanDTO.isOut(), parseAddress(donationPlanDTO.getStation()));
+        DonationPlan donationPlan = new DonationPlan(
+                id,
+                donationPlanDTO.getBloodStationId(),
+                donationPlanDTO.getCityId(),
+                donationPlanDTO.getBloodClass(),
+                donationPlanDTO.getPlanDate(),
+                donationPlanDTO.getPaymentType(),
+                donationPlanDTO.isOut(),
+                parseAddress(donationPlanDTO.getStation()),
+                donationPlanDTO.getStation().getPhones(),
+                donationPlanDTO.getStation().getWorktime());
         donationPlan.setUser(user);
         user.getDonationPlans().add(donationPlan);
         userRepo.save(user);

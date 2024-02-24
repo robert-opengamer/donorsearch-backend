@@ -40,13 +40,11 @@ public class DonationPlanDTO {
     @JsonProperty("is_out")
     private boolean isOut;
 
-    private int donation;
-
     private StationDTO station;
 
     public DonationPlanDTO(int bloodStationId, int cityId, int objectId,
                                String bloodClass, String planDate, String paymentType,
-                               String status, boolean isOut, int donation, StationDTO station) {
+                               String status, boolean isOut, StationDTO station) {
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
         this.objectId = objectId;
@@ -55,7 +53,6 @@ public class DonationPlanDTO {
         this.paymentType = paymentType;
         this.status = status;
         this.isOut = isOut;
-        this.donation = donation;
         this.station = station;
     }
 
@@ -134,11 +131,4 @@ public class DonationPlanDTO {
         isOut = out;
     }
 
-    public int getDonation() {
-        return donation;
-    }
-
-    public void setDonation(int donation) {
-        this.donation = donation;
-    }
 }
