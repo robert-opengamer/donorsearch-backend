@@ -2,7 +2,7 @@ package ru.donorsearch.backend.controller.dto.donation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DonationPlanRequest {
+public class DonationPlanDTO {
     @JsonProperty("blood_station_id")
     private int bloodStationId;
 
@@ -31,7 +31,7 @@ public class DonationPlanRequest {
 
     private int donation;
 
-    public DonationPlanRequest(int bloodStationId, int cityId, int objectId,
+    public DonationPlanDTO(int bloodStationId, int cityId, int objectId,
                                String bloodClass, String planDate, String paymentType,
                                String status, boolean isOut, int contentType, int donation) {
         this.bloodStationId = bloodStationId;
@@ -46,7 +46,7 @@ public class DonationPlanRequest {
         this.donation = donation;
     }
 
-    public DonationPlanRequest() {
+    public DonationPlanDTO() {
     }
 
     public int getBloodStationId() {
