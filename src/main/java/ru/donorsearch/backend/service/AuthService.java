@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.Optional;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -129,6 +130,10 @@ public class AuthService {
             newUser.setEmailVerified(isEmailVerified);
             newUser.setPhoneVerified(isPhoneVerified);
             userRepo.save(newUser);
+        } else {
+            User oldUser = userRepo.findById(id).get();
+            oldUser.setChatId(request.getChatId());
+            userRepo.save(oldUser);
         }
         return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
     }
