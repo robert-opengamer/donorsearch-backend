@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -33,19 +34,22 @@ public class AuthHttpClient {
     private final String REG_URI;
     private final String CONFIRM_EMAIL_URI;
     private final String CONFIRM_PHONE_URI;
+    private final String AUTH_ME_URI;
 
     public AuthHttpClient(CloseableHttpClient httpClient,
                           ObjectMapper objectMapper,
                           @Value("${spring.data.uri.auth.login}") String LOGIN_URI,
                           @Value("${spring.data.uri.auth.reg}") String REG_URI,
                           @Value("${spring.data.uri.auth.confirm-email}") String CONFIRM_EMAIL_URI,
-                          @Value("${spring.data.uri.auth.confirm-phone}") String CONFIRM_PHONE_URI) {
+                          @Value("${spring.data.uri.auth.confirm-phone}") String CONFIRM_PHONE_URI,
+                          @Value("${spring.data.uri.auth.auth-me}") String AUTH_ME_URI) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.LOGIN_URI = LOGIN_URI;
         this.REG_URI = REG_URI;
         this.CONFIRM_EMAIL_URI = CONFIRM_EMAIL_URI;
         this.CONFIRM_PHONE_URI = CONFIRM_PHONE_URI;
+        this.AUTH_ME_URI = AUTH_ME_URI;
     }
 
     public long registerClient(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
@@ -133,6 +137,27 @@ public class AuthHttpClient {
                 return response;
             } else {
                 throw new AuthException("Invalid login or password");
+            }
+
+        } catch (IOException e) {
+            logger.error("Error occurred with send POST to: {}", CONFIRM_PHONE_URI);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public long getUserIdFromSession(String token) {
+        HttpGet httpGet = new HttpGet(AUTH_ME_URI);
+        httpGet.setHeader("Authorization", token);
+
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            logger.info("Retrieve response from: {}", CONFIRM_PHONE_URI);
+            logger.info("Status code: {}", statusCode);
+            if (statusCode == 200) {
+                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
+                return jsonNode.get("user_id").asLong();
+            } else {
+                throw new AuthException("Invalid token");
             }
 
         } catch (IOException e) {

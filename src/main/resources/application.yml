@@ -19,6 +19,7 @@ spring:
         login: "https://api2.donorsearch.org/api/auth/login/"
         confirm-email: "https://api2.donorsearch.org/api/auth/confirm_email_reg/"
         confirm-phone: "https://api2.donorsearch.org/api/auth/confirm_phone_reg/"
+        auth-me: "https://api2.donorsearch.org/api/auth/me/"
       donation:
         donation-plan: "https://api2.donorsearch.org/api/donation_plan/"
 
