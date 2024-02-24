@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 import ru.donorsearch.backend.client.AuthHttpClient;
 import ru.donorsearch.backend.client.DonationHttpClient;
 import ru.donorsearch.backend.controller.dto.auth.*;
+import ru.donorsearch.backend.entity.DonationPlan;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.DonationPlanRepo;
 import ru.donorsearch.backend.repository.UserRepo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -112,6 +114,8 @@ public class AuthService {
             }
         }
 
+        String cookie = extractCookies(response);
+
         String responseJson = EntityUtils.toString(response.getEntity());
         logger.info(responseJson);
         JsonNode jsonNode = objectMapper.readTree(responseJson);
@@ -130,14 +134,29 @@ public class AuthService {
             newUser.setPhoneNumber(phone);
             newUser.setEmailVerified(isEmailVerified);
             newUser.setPhoneVerified(isPhoneVerified);
-            newUser.getDonationPlans().addAll(donationHttpClient.getAllDonationPlans(token));
-            userRepo.save(newUser);
+            User savedUser = userRepo.save(newUser);
+            List<DonationPlan> list = donationHttpClient.getAllDonationPlans(token, cookie);
+            list.forEach(plan -> plan.setUser(savedUser));
+            savedUser.getDonationPlans().addAll(list);
+            userRepo.save(savedUser);
+
         } else {
             User oldUser = userRepo.findById(id).get();
             oldUser.setChatId(request.getChatId());
             userRepo.save(oldUser);
         }
         return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
+    }
+
+    public String extractCookies(HttpResponse response) {
+        StringBuilder cookieBuilder = new StringBuilder();
+        for (Header header : response.getHeaders("Set-Cookie")) {
+            if (!cookieBuilder.isEmpty()) {
+                cookieBuilder.append("; ");
+            }
+            cookieBuilder.append(header.getValue());
+        }
+        return cookieBuilder.toString();
     }
 
 

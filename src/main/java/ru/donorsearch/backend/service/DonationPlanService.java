@@ -60,7 +60,6 @@ public class DonationPlanService {
         Long deletedId = donationHttpClient.deleteDonationPlanById(id, token);
         StatusResponse statusResponse = new StatusResponse("OK");
 
-
         return new ResponseEntity<>(statusResponse, HttpStatus.OK);
     }
 
