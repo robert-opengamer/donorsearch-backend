@@ -22,10 +22,20 @@ import ru.donorsearch.backend.repository.UserRepo;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+
+    private final Map<String, String> bloodTypes = Map.of(
+            "blood", "цельной крови",
+            "plasma", "плазмы",
+            "platelets","тромбоцитов",
+            "erythrocytes", "эритроцитов",
+            "leukocytes", "лейкоцитов"
+    );
 
     private final UserRepo userRepo;
 
@@ -84,19 +94,35 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<DonationPlan> donationPlansThreeDays = donationPlanRepo.findDonationPlansByPlanDate(nextThreeDays);
         List<DonationPlan> donationPlansOneDays = donationPlanRepo.findDonationPlansByPlanDate(nextOneDay);
 
+
         donationPlansThreeDays.forEach(donationPlan -> {
 
             User user = donationPlan.getUser();
+            String text =
+                    "Приближающееся событие: " + bloodTypes.get(donationPlan.getBloodClass() + '\n' + '\n'
+                    + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
+                    + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
+                    + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
+                    + "Номера телефонов: " + donationPlan.getWorkPhones()
+            );
 
-            sendMessage(user.getChatId(), String.format("Приближающееся событие: %s", donationPlan.getPlanDate()));
+
+            sendMessage(user.getChatId(), text);
 
         });
 
         donationPlansOneDays.forEach(donationPlan -> {
 
             User user = donationPlan.getUser();
+            String text =
+                    "Приближающееся событие: " + bloodTypes.get(donationPlan.getBloodClass() + '\n' + '\n'
+                            + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
+                            + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
+                            + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
+                            + "Номера телефонов: " + donationPlan.getWorkPhones()
+                    );
 
-            sendMessage(user.getChatId(), String.format("Приближающееся событие: %s", donationPlan.getPlanDate()));
+            sendMessage(user.getChatId(), text);
 
         });
     }
