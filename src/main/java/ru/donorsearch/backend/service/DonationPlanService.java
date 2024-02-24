@@ -46,7 +46,7 @@ public class DonationPlanService {
         DonationPlan donationPlan = new DonationPlan(id, donationPlanDTO.getBloodStationId(),
                 donationPlanDTO.getCityId(), donationPlanDTO.getBloodClass(),
                 donationPlanDTO.getPlanDate(), donationPlanDTO.getPaymentType(),
-                donationPlanDTO.isOut());
+                donationPlanDTO.isOut(), donationPlanDTO.getStation());
         donationPlan.setUser(user);
         user.getDonationPlans().add(donationPlan);
         userRepo.save(user);

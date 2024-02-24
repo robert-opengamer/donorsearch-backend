@@ -87,7 +87,7 @@ public class DonationHttpClient {
 
     public List<DonationPlan> getAllDonationPlans(String token) {
         HttpGet httpGet = new HttpGet(DONATION_PLAN_URI);
-        httpGet.setHeader("Authoriation", token);
+        httpGet.setHeader("Authorization", token);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
