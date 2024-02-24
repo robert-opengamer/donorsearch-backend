@@ -78,8 +78,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void sendNotification() {
         LocalDate currentDate = LocalDate.now();
 
-        String nextThreeDays = currentDate.plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        String nextOneDay = currentDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        String nextThreeDays = currentDate.plusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String nextOneDay = currentDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         List<DonationPlan> donationPlansThreeDays = donationPlanRepo.findDonationPlansByPlanDate(nextThreeDays);
         List<DonationPlan> donationPlansOneDays = donationPlanRepo.findDonationPlansByPlanDate(nextOneDay);
