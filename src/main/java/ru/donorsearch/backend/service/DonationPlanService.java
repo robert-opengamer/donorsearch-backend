@@ -48,6 +48,8 @@ public class DonationPlanService {
                 donationPlanDTO.getPlanDate(), donationPlanDTO.getPaymentType(),
                 donationPlanDTO.isOut());
         donationPlan.setUser(user);
+        user.getDonationPlans().add(donationPlan);
+        userRepo.save(user);
 
         donationPlanRepository.save(donationPlan);
         return new ResponseEntity<>(statusResponse, HttpStatus.OK);
