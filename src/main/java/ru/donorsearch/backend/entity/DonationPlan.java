@@ -15,7 +15,7 @@ public class DonationPlan {
     private boolean isOut;
 
     @ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     public DonationPlan(long id, int bloodStationId, int cityId, String bloodClass, String planDate, String paymentType, boolean isOut) {

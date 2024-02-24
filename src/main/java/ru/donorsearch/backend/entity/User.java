@@ -3,6 +3,7 @@ package ru.donorsearch.backend.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,6 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "user_id")
     private Long id;
     @JsonProperty("chat_id")
     private Long chatId;
@@ -20,8 +20,7 @@ public class User {
     private Boolean emailVerified;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Set<DonationPlan> donationPlans;
+    private List<DonationPlan> donationPlans = new ArrayList<>();
 
 
     public User(Long id, Long chatId, String email, String phoneNumber, Boolean phoneVerified, Boolean emailVerified) {
@@ -82,5 +81,13 @@ public class User {
 
     public void setChatId(Long chatId) {
         this.chatId = chatId;
+    }
+
+    public List<DonationPlan> getDonationPlans() {
+        return donationPlans;
+    }
+
+    public void setDonationPlans(List<DonationPlan> donationPlans) {
+        this.donationPlans = donationPlans;
     }
 }
