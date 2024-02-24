@@ -4,9 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +28,7 @@ import ru.donorsearch.backend.controller.dto.auth.LoginResponse;
 import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
 import ru.donorsearch.backend.controller.dto.auth.RegistrationResponse;
 import ru.donorsearch.backend.controller.dto.auth.ResponseWithToken;
+import ru.donorsearch.backend.entity.DonationPlan;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.DonationPlanRepo;
 import ru.donorsearch.backend.repository.UserRepo;
@@ -119,6 +125,8 @@ public class AuthService {
             }
         }
 
+        String cookie = extractCookies(response);
+
         String responseJson = EntityUtils.toString(response.getEntity());
         logger.info(responseJson);
         JsonNode jsonNode = objectMapper.readTree(responseJson);
@@ -137,14 +145,29 @@ public class AuthService {
             newUser.setPhoneNumber(phone);
             newUser.setEmailVerified(isEmailVerified);
             newUser.setPhoneVerified(isPhoneVerified);
-            newUser.getDonationPlans().addAll(donationHttpClient.getAllDonationPlans(token));
-            userRepo.save(newUser);
+            User savedUser = userRepo.save(newUser);
+            List<DonationPlan> list = donationHttpClient.getAllDonationPlans(token, cookie);
+            list.forEach(plan -> plan.setUser(savedUser));
+            savedUser.getDonationPlans().addAll(list);
+            userRepo.save(savedUser);
+
         } else {
             User oldUser = userRepo.findById(id).get();
             oldUser.setChatId(request.getChatId());
             userRepo.save(oldUser);
         }
         return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
+    }
+
+    public String extractCookies(HttpResponse response) {
+        StringBuilder cookieBuilder = new StringBuilder();
+        for (Header header : response.getHeaders("Set-Cookie")) {
+            if (!cookieBuilder.isEmpty()) {
+                cookieBuilder.append("; ");
+            }
+            cookieBuilder.append(header.getValue());
+        }
+        return cookieBuilder.toString();
     }
 
 

@@ -7,6 +7,7 @@ import jakarta.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -51,7 +52,7 @@ public class DonationHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
+            logger.info("Retrieve response from POST: {}", DONATION_PLAN_URI);
             logger.info(json);
             logger.info("Status Code: {}", statusCode);
             if (statusCode == 201) {
@@ -72,7 +73,7 @@ public class DonationHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
+            logger.info("Retrieve response from DELETE: {}", DONATION_PLAN_URI);
             logger.info("Status Code: {}", statusCode);
             if (statusCode == 204) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
@@ -85,13 +86,17 @@ public class DonationHttpClient {
         }
     }
 
-    public List<DonationPlan> getAllDonationPlans(String token) {
+    public List<DonationPlan> getAllDonationPlans(String token, String cookie) {
         HttpGet httpGet = new HttpGet(DONATION_PLAN_URI);
         httpGet.setHeader("Authorization", token);
+        httpGet.setHeader("Cookie", cookie);
+        httpGet.setHeader("Content-Type", "application/json");
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
+            logger.info("Retrieve response from GET: {}", DONATION_PLAN_URI);
+            logger.info(httpGet.toString());
+            logger.info(Arrays.toString(httpGet.getAllHeaders()));
             logger.info("Status Code: {}", statusCode);
             if (statusCode == 200) {
                 List<DonationPlan> donationPlans = new ArrayList<>();
