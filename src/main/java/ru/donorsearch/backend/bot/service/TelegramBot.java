@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
@@ -84,7 +85,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return config.getToken();
     }
 
-    @Scheduled(cron = "0 12 * * * *")
+    @Scheduled(cron = "0 0 12 * * *")
     public void sendNotification() {
         LocalDate currentDate = LocalDate.now();
 
@@ -98,13 +99,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         donationPlansThreeDays.forEach(donationPlan -> {
 
             User user = donationPlan.getUser();
+            String workTime = donationPlan.getWorkTime() == null || Objects.equals(donationPlan.getWorkTime(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
+            String event = bloodTypes.get(donationPlan.getBloodClass()) == null  ? "Приближающееся событие: " + "донорство" + '\n' + '\n' : "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n';
+            String address = donationPlan.getAddress() == null  || Objects.equals(donationPlan.getAddress(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
+            String phones = donationPlan.getWorkPhones() == null  || Objects.equals(donationPlan.getWorkPhones(), "") ? "" : "Контакты: " + donationPlan.getWorkPhones();
+
             String text =
-                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n'
-                    + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
-                    + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
-                    + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
-                    + "Номера телефонов: " + donationPlan.getWorkPhones()
-            ;
+                    event
+                            + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
+                            + address
+                            + workTime
+                            + phones
+                    ;
 
             sendMessage(user.getChatId(), text);
 
@@ -113,12 +119,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         donationPlansOneDays.forEach(donationPlan -> {
 
             User user = donationPlan.getUser();
+
+            String workTime = donationPlan.getWorkTime() == null || Objects.equals(donationPlan.getWorkTime(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
+            String event = bloodTypes.get(donationPlan.getBloodClass()) == null  ? "Приближающееся событие: " + "донорство" + '\n' + '\n' : "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n';
+            String address = donationPlan.getAddress() == null  || Objects.equals(donationPlan.getAddress(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
+            String phones = donationPlan.getWorkPhones() == null  || Objects.equals(donationPlan.getWorkPhones(), "") ? "" : "Контакты: " + donationPlan.getWorkPhones();
+
             String text =
-                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n'
+                            event
                             + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
-                            + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
-                            + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
-                            + "Номера телефонов: " + donationPlan.getWorkPhones()
+                            + address
+                            + workTime
+                            + phones
                     ;
 
             sendMessage(user.getChatId(), text);

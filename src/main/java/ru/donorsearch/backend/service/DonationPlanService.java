@@ -101,7 +101,7 @@ public class DonationPlanService {
         return address;
     }
 
-    @Scheduled(cron = "59 23 * * * *")
+    @Scheduled(cron = "0 59 23 * * *")
     public void updateDonationPlans() {
         LocalDate currentDate = LocalDate.now();
 
