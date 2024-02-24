@@ -103,10 +103,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             String event = bloodTypes.get(donationPlan.getBloodClass()) == null  ? "Приближающееся событие: " + "донорство" + '\n' + '\n' : "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n';
             String address = donationPlan.getAddress() == null  || Objects.equals(donationPlan.getAddress(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
             String phones = donationPlan.getWorkPhones() == null  || Objects.equals(donationPlan.getWorkPhones(), "") ? "" : "Контакты: " + donationPlan.getWorkPhones();
+            String title = donationPlan.getTitle() == null  || Objects.equals(donationPlan.getTitle(), "") ? "" : "Центр крови: " + donationPlan.getTitle() + '\n' + '\n';
 
             String text =
                     event
                             + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
+                            + title
                             + address
                             + workTime
                             + phones
@@ -120,14 +122,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             User user = donationPlan.getUser();
 
-            String workTime = donationPlan.getWorkTime() == null || Objects.equals(donationPlan.getWorkTime(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
+            String workTime = donationPlan.getWorkTime() == null || Objects.equals(donationPlan.getWorkTime(), "") ? "" : "Расписание: " + donationPlan.getWorkTime() + '\n' + '\n';
             String event = bloodTypes.get(donationPlan.getBloodClass()) == null  ? "Приближающееся событие: " + "донорство" + '\n' + '\n' : "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n';
             String address = donationPlan.getAddress() == null  || Objects.equals(donationPlan.getAddress(), "") ? "" : "Адрес: " + donationPlan.getAddress() + '\n' + '\n';
             String phones = donationPlan.getWorkPhones() == null  || Objects.equals(donationPlan.getWorkPhones(), "") ? "" : "Контакты: " + donationPlan.getWorkPhones();
+            String title = donationPlan.getTitle() == null  || Objects.equals(donationPlan.getTitle(), "") ? "" : "Центр крови: " + donationPlan.getTitle() + '\n' + '\n';
 
             String text =
                             event
                             + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
+                            + title
                             + address
                             + workTime
                             + phones
