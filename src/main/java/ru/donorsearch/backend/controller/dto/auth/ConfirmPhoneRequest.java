@@ -1,22 +1,22 @@
-package ru.donorsearch.backend.controller.dto;
+package ru.donorsearch.backend.controller.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ConfirmEmailRequest {
+public class ConfirmPhoneRequest {
     @JsonProperty("user_id")
     private Long userId;
 
-    private String email;
+    private String phone;
 
     private String code;
 
-    public ConfirmEmailRequest(Long userId, String email, String code) {
+    public ConfirmPhoneRequest(Long userId, String phone, String code) {
         this.userId = userId;
-        this.email = email;
+        this.phone = phone;
         this.code = code;
     }
 
-    public ConfirmEmailRequest() {
+    public ConfirmPhoneRequest() {
     }
 
     public Long getUserId() {
@@ -27,12 +27,12 @@ public class ConfirmEmailRequest {
         this.userId = userId;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getCode() {

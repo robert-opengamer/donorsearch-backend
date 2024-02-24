@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -18,10 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.donorsearch.backend.controller.dto.ConfirmEmailRequest;
-import ru.donorsearch.backend.controller.dto.ConfirmPhoneRequest;
-import ru.donorsearch.backend.controller.dto.LoginRequest;
-import ru.donorsearch.backend.controller.dto.RegistrationRequest;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmEmailRequest;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmPhoneRequest;
+import ru.donorsearch.backend.controller.dto.auth.LoginRequest;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
 import ru.donorsearch.backend.exceptions.AuthException;
 
 @Component
@@ -38,10 +36,10 @@ public class AuthHttpClient {
 
     public AuthHttpClient(CloseableHttpClient httpClient,
                           ObjectMapper objectMapper,
-                          @Value("${spring.data.auth.login}") String LOGIN_URI,
-                          @Value("${spring.data.auth.reg}") String REG_URI,
-                          @Value("${spring.data.auth.confirm-email}") String CONFIRM_EMAIL_URI,
-                          @Value("${spring.data.auth.confirm-phone}") String CONFIRM_PHONE_URI) {
+                          @Value("${spring.data.uri.auth.login}") String LOGIN_URI,
+                          @Value("${spring.data.uri.auth.reg}") String REG_URI,
+                          @Value("${spring.data.uri.auth.confirm-email}") String CONFIRM_EMAIL_URI,
+                          @Value("${spring.data.uri.auth.confirm-phone}") String CONFIRM_PHONE_URI) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.LOGIN_URI = LOGIN_URI;

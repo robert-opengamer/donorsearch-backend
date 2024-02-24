@@ -1,13 +1,8 @@
 package ru.donorsearch.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.donorsearch.backend.controller.dto.DonationPlanResponse;
 import ru.donorsearch.backend.service.DonationPlanService;
 
 @RestController

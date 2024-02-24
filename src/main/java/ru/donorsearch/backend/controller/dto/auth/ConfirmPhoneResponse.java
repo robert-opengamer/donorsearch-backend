@@ -1,4 +1,4 @@
-package ru.donorsearch.backend.controller.dto;
+package ru.donorsearch.backend.controller.dto.auth;
 
 public class ConfirmPhoneResponse {
     private Long id;

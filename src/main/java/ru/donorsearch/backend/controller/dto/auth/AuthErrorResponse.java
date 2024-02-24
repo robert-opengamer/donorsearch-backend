@@ -1,4 +1,4 @@
-package ru.donorsearch.backend.controller.dto;
+package ru.donorsearch.backend.controller.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.ZonedDateTime;

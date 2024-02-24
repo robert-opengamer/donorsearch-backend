@@ -6,7 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.donorsearch.backend.controller.dto.*;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmEmailRequest;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmPhoneRequest;
+import ru.donorsearch.backend.controller.dto.auth.LoginRequest;
+import ru.donorsearch.backend.controller.dto.auth.LoginResponse;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationResponse;
+import ru.donorsearch.backend.controller.dto.auth.ResponseWithToken;
 import ru.donorsearch.backend.service.AuthService;
 
 import java.io.UnsupportedEncodingException;

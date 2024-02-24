@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import ru.donorsearch.backend.controller.dto.RegistrationRequest;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
 
 public class RegistrationSerializer extends JsonSerializer<RegistrationRequest> {
     @Override

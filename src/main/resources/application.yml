@@ -13,9 +13,12 @@ spring:
     bot:
       token: "6628063981:AAEUuBlxYOGwPrJyvoi3R0_COaF6O4kKKf0"
       name: "donorsearch_opengamer_bot"
-    auth:
-      reg: "https://api2.donorsearch.org/api/auth/registration/"
-      login: "https://api2.donorsearch.org/api/auth/login/"
-      confirm-email: "https://api2.donorsearch.org/api/auth/confirm_email_reg/"
-      confirm-phone: "https://api2.donorsearch.org/api/auth/confirm_phone_reg/"
+    uri:
+      auth:
+        reg: "https://api2.donorsearch.org/api/auth/registration/"
+        login: "https://api2.donorsearch.org/api/auth/login/"
+        confirm-email: "https://api2.donorsearch.org/api/auth/confirm_email_reg/"
+        confirm-phone: "https://api2.donorsearch.org/api/auth/confirm_phone_reg/"
+      donation:
+        donation-plan: "https://api2.donorsearch.org/api/donation_plan/"
 

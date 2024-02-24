@@ -1,14 +1,20 @@
 package ru.donorsearch.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @Column(name = "user_id")
     private Long id;
     @JsonProperty("chat_id")
     private Long chatId;
@@ -16,6 +22,10 @@ public class User {
     private String phoneNumber;
     private Boolean phoneVerified;
     private Boolean emailVerified;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<DonationPlan> donationPlans;
 
 
     public User(Long id, Long chatId, String email, String phoneNumber, Boolean phoneVerified, Boolean emailVerified) {

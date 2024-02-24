@@ -6,25 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import ru.donorsearch.backend.client.AuthHttpClient;
-import ru.donorsearch.backend.controller.dto.*;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmEmailRequest;
+import ru.donorsearch.backend.controller.dto.auth.ConfirmPhoneRequest;
+import ru.donorsearch.backend.controller.dto.auth.LoginRequest;
+import ru.donorsearch.backend.controller.dto.auth.LoginResponse;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
+import ru.donorsearch.backend.controller.dto.auth.RegistrationResponse;
+import ru.donorsearch.backend.controller.dto.auth.ResponseWithToken;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.UserRepo;
 
 import java.io.UnsupportedEncodingException;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 @Service

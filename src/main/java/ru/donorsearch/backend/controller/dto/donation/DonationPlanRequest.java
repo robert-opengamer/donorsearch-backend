@@ -1,4 +1,4 @@
-package ru.donorsearch.backend.controller.dto;
+package ru.donorsearch.backend.controller.dto.donation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
