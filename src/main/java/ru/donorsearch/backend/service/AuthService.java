@@ -3,8 +3,6 @@ package ru.donorsearch.backend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.Optional;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -16,17 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.donorsearch.backend.client.AuthHttpClient;
 import ru.donorsearch.backend.client.DonationHttpClient;
-import ru.donorsearch.backend.controller.dto.auth.ConfirmEmailRequest;
-import ru.donorsearch.backend.controller.dto.auth.ConfirmPhoneRequest;
-import ru.donorsearch.backend.controller.dto.auth.LoginRequest;
-import ru.donorsearch.backend.controller.dto.auth.LoginResponse;
-import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
-import ru.donorsearch.backend.controller.dto.auth.RegistrationResponse;
-import ru.donorsearch.backend.controller.dto.auth.ResponseWithToken;
+import ru.donorsearch.backend.controller.dto.auth.*;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.DonationPlanRepo;
 import ru.donorsearch.backend.repository.UserRepo;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Pattern;
 

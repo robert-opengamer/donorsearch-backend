@@ -1,6 +1,9 @@
 package ru.donorsearch.backend.bot.service;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,14 +14,29 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.BotOptions;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import ru.donorsearch.backend.bot.config.BotConfig;
+import ru.donorsearch.backend.entity.DonationPlan;
+import ru.donorsearch.backend.entity.User;
+import ru.donorsearch.backend.repository.DonationPlanRepo;
+import ru.donorsearch.backend.repository.UserRepo;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
-    @Autowired
+    private final UserRepo userRepo;
+
+    private final DonationPlanRepo donationPlanRepo;
+
     final BotConfig config;
 
-    public TelegramBot(BotConfig config) {
+
+    public TelegramBot(UserRepo userRepo, DonationPlanRepo donationPlanRepo, BotConfig config) {
+        this.userRepo = userRepo;
+        this.donationPlanRepo = donationPlanRepo;
         this.config = config;
     }
 
@@ -27,6 +45,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         Long chatId = update.getMessage().getChatId();
         Message message = update.getMessage();
         if (message.hasText()) {
+            if (message.getText().equals("/notify")) {
+                sendNotification();
+                return;
+            }
             sendMessage(chatId, message.getText());
         }
     }
@@ -50,5 +72,32 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return config.getToken();
+    }
+
+    @Scheduled(cron = "0 12 * * * *")
+    public void sendNotification() {
+        LocalDate currentDate = LocalDate.now();
+
+        String nextThreeDays = currentDate.plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        String nextOneDay = currentDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+        List<DonationPlan> donationPlansThreeDays = donationPlanRepo.findDonationPlansByPlanDate(nextThreeDays);
+        List<DonationPlan> donationPlansOneDays = donationPlanRepo.findDonationPlansByPlanDate(nextOneDay);
+
+        donationPlansThreeDays.forEach(donationPlan -> {
+
+            User user = donationPlan.getUser();
+
+            sendMessage(user.getChatId(), String.format("Приближающееся событие: %s", donationPlan.getPlanDate()));
+
+        });
+
+        donationPlansOneDays.forEach(donationPlan -> {
+
+            User user = donationPlan.getUser();
+
+            sendMessage(user.getChatId(), String.format("Приближающееся событие: %s", donationPlan.getPlanDate()));
+
+        });
     }
 }
