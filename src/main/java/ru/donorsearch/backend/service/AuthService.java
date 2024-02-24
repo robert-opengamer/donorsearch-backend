@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.donorsearch.backend.client.AuthHttpClient;
+import ru.donorsearch.backend.client.DonationHttpClient;
 import ru.donorsearch.backend.controller.dto.auth.ConfirmEmailRequest;
 import ru.donorsearch.backend.controller.dto.auth.ConfirmPhoneRequest;
 import ru.donorsearch.backend.controller.dto.auth.LoginRequest;
@@ -23,6 +24,7 @@ import ru.donorsearch.backend.controller.dto.auth.RegistrationRequest;
 import ru.donorsearch.backend.controller.dto.auth.RegistrationResponse;
 import ru.donorsearch.backend.controller.dto.auth.ResponseWithToken;
 import ru.donorsearch.backend.entity.User;
+import ru.donorsearch.backend.repository.DonationPlanRepo;
 import ru.donorsearch.backend.repository.UserRepo;
 
 import java.io.UnsupportedEncodingException;
@@ -38,11 +40,17 @@ public class AuthService {
     private final UserRepo userRepo;
     private final ObjectMapper objectMapper;
 
+    private final DonationPlanRepo donationPlanRepo;
+
+    private final DonationHttpClient donationHttpClient;
+
     @Autowired
-    public AuthService(AuthHttpClient authHttpClient, UserRepo userRepo, ObjectMapper objectMapper) {
+    public AuthService(AuthHttpClient authHttpClient, UserRepo userRepo, ObjectMapper objectMapper, DonationPlanRepo donationPlanRepo, DonationHttpClient donationHttpClient) {
         this.authHttpClient = authHttpClient;
         this.userRepo = userRepo;
         this.objectMapper = objectMapper;
+        this.donationPlanRepo = donationPlanRepo;
+        this.donationHttpClient = donationHttpClient;
     }
 
     public RegistrationResponse registerUser(RegistrationRequest request) throws UnsupportedEncodingException, JsonProcessingException {
@@ -129,6 +137,7 @@ public class AuthService {
             newUser.setPhoneNumber(phone);
             newUser.setEmailVerified(isEmailVerified);
             newUser.setPhoneVerified(isPhoneVerified);
+            newUser.getDonationPlans().addAll(donationHttpClient.getAllDonationPlans(token));
             userRepo.save(newUser);
         } else {
             User oldUser = userRepo.findById(id).get();
