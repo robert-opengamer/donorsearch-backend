@@ -56,10 +56,10 @@ public class DonationPlanService {
     }
 
     public ResponseEntity<StatusResponse> deleteDonationPlan(String token, Long id) {
-
+        donationPlanRepository.deleteById(id);
         Long deletedId = donationHttpClient.deleteDonationPlanById(id, token);
         StatusResponse statusResponse = new StatusResponse("OK");
-        donationPlanRepository.deleteById(deletedId);
+
 
         return new ResponseEntity<>(statusResponse, HttpStatus.OK);
     }

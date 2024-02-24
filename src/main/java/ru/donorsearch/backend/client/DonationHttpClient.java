@@ -63,14 +63,14 @@ public class DonationHttpClient {
 
     public long deleteDonationPlanById(long id, String token) {
 
-        HttpDelete httpDelete = new HttpDelete(DONATION_PLAN_URI + id);
+        HttpDelete httpDelete = new HttpDelete(DONATION_PLAN_URI + id + "/");
         httpDelete.setHeader("Authorization", token);
 
         try (CloseableHttpResponse response = httpClient.execute(httpDelete)) {
             int statusCode = response.getStatusLine().getStatusCode();
             logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
             logger.info("Status Code: {}", statusCode);
-            if (statusCode == 200) {
+            if (statusCode == 204) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
             } else {
