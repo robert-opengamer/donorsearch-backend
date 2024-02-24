@@ -12,10 +12,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "payment_type",
         "status",
         "is_out",
-        "donation"
+        "donation",
+        "station"
+
 })
 public class DonationPlanDTO {
-    @JsonProperty("blood_station_id")
+    @JsonProperty("blood_station")
     private int bloodStationId;
 
     @JsonProperty("city_id")
@@ -40,11 +42,11 @@ public class DonationPlanDTO {
 
     private int donation;
 
-    private String station;
+    private StationDTO station;
 
     public DonationPlanDTO(int bloodStationId, int cityId, int objectId,
                                String bloodClass, String planDate, String paymentType,
-                               String status, boolean isOut, int donation, String station) {
+                               String status, boolean isOut, int donation, StationDTO station) {
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
         this.objectId = objectId;
@@ -60,11 +62,11 @@ public class DonationPlanDTO {
     public DonationPlanDTO() {
     }
 
-    public String getStation() {
+    public StationDTO getStation() {
         return station;
     }
 
-    public void setStation(String station) {
+    public void setStation(StationDTO station) {
         this.station = station;
     }
 

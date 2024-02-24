@@ -3,6 +3,8 @@ package ru.donorsearch.backend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import ru.donorsearch.backend.client.AuthHttpClient;
 import ru.donorsearch.backend.client.DonationHttpClient;
 import ru.donorsearch.backend.config.StatusResponse;
 import ru.donorsearch.backend.controller.dto.donation.DonationPlanDTO;
+import ru.donorsearch.backend.controller.dto.donation.StationDTO;
 import ru.donorsearch.backend.entity.DonationPlan;
 import ru.donorsearch.backend.entity.User;
 import ru.donorsearch.backend.repository.DonationPlanRepo;
@@ -21,12 +24,11 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class DonationPlanService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DonationPlanService.class);
+
     private final UserRepo userRepo;
-
     private final AuthHttpClient authHttpClient;
-
     private final DonationHttpClient donationHttpClient;
-
     private final DonationPlanRepo donationPlanRepository;
 
     @Autowired
@@ -51,7 +53,7 @@ public class DonationPlanService {
         DonationPlan donationPlan = new DonationPlan(id, donationPlanDTO.getBloodStationId(),
                 donationPlanDTO.getCityId(), donationPlanDTO.getBloodClass(),
                 donationPlanDTO.getPlanDate(), donationPlanDTO.getPaymentType(),
-                donationPlanDTO.isOut(), donationPlanDTO.getStation());
+                donationPlanDTO.isOut(), parseAddress(donationPlanDTO.getStation()));
         donationPlan.setUser(user);
         user.getDonationPlans().add(donationPlan);
         userRepo.save(user);
@@ -76,10 +78,18 @@ public class DonationPlanService {
 
     }*/
 
-    public String convertDate(String inputDate) {
+    private String convertDate(String inputDate) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate date = LocalDate.parse(inputDate, inputFormatter);
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(outputFormatter);
     }
+
+    private String parseAddress(StationDTO station) {
+        String cityTitle = station.getCity().getTitle();
+        String address = cityTitle + ", " + station.getAddress();
+        logger.info(address);
+        return address;
+    }
+
 }

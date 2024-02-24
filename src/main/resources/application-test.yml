@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/shortened_urls
+    url: jdbc:postgresql://localhost:5432/hackathon
     username: postgres
     password: 1
   jpa:
