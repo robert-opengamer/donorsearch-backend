@@ -12,20 +12,20 @@ import ru.donorsearch.backend.bot.service.TelegramBot;
 @Component
 public class BotInitializer {
 
-    private final TelegramBot bot;
-
-    @Autowired
-    public BotInitializer(TelegramBot bot) {
-        this.bot = bot;
-    }
-
-    @EventListener({ContextRefreshedEvent.class})
-    public void init() throws TelegramApiException {
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        try {
-            telegramBotsApi.registerBot(bot);
-        } catch (TelegramApiException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    private final TelegramBot bot;
+//
+//    @Autowired
+//    public BotInitializer(TelegramBot bot) {
+//        this.bot = bot;
+//    }
+//
+//    @EventListener({ContextRefreshedEvent.class})
+//    public void init() throws TelegramApiException {
+//        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+//        try {
+//            telegramBotsApi.registerBot(bot);
+//        } catch (TelegramApiException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 }

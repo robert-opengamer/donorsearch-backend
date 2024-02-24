@@ -41,14 +41,16 @@ public class DonationHttpClient {
         httpPost.setHeader("Content-Type", "application/json");
         httpPost.setHeader("Authorization", token);
 
+        String json = objectMapper.writeValueAsString(request);
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(request));
         httpPost.setEntity(entity);
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
             logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
+            logger.info(json);
             logger.info("Status Code: {}", statusCode);
-            if (statusCode == 200) {
+            if (statusCode == 201) {
                 JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
                 return jsonNode.get("id").asLong();
             } else {

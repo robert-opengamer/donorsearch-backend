@@ -151,17 +151,18 @@ public class AuthHttpClient {
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            logger.info("Retrieve response from: {}", CONFIRM_PHONE_URI);
+            logger.info("Retrieve response from: {}", AUTH_ME_URI);
             logger.info("Status code: {}", statusCode);
+            String json = EntityUtils.toString(response.getEntity());
             if (statusCode == 200) {
-                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
-                return jsonNode.get("user_id").asLong();
+                JsonNode jsonNode = objectMapper.readTree(json);
+                return jsonNode.get("id").asLong();
             } else {
                 throw new AuthException("Invalid token");
             }
 
         } catch (IOException e) {
-            logger.error("Error occurred with send POST to: {}", CONFIRM_PHONE_URI);
+            logger.error("Error occurred with send POST to: {}", AUTH_ME_URI);
             throw new RuntimeException(e);
         }
     }

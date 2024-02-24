@@ -1,7 +1,19 @@
 package ru.donorsearch.backend.controller.dto.donation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({
+        "blood_station_id",
+        "city_id",
+        "object_id",
+        "blood_class",
+        "plan_date",
+        "payment_type",
+        "status",
+        "is_out",
+        "donation"
+})
 public class DonationPlanDTO {
     @JsonProperty("blood_station_id")
     private int bloodStationId;
@@ -26,14 +38,11 @@ public class DonationPlanDTO {
     @JsonProperty("is_out")
     private boolean isOut;
 
-    @JsonProperty("content_type")
-    private int contentType;
-
     private int donation;
 
     public DonationPlanDTO(int bloodStationId, int cityId, int objectId,
                                String bloodClass, String planDate, String paymentType,
-                               String status, boolean isOut, int contentType, int donation) {
+                               String status, boolean isOut, int donation) {
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
         this.objectId = objectId;
@@ -42,7 +51,6 @@ public class DonationPlanDTO {
         this.paymentType = paymentType;
         this.status = status;
         this.isOut = isOut;
-        this.contentType = contentType;
         this.donation = donation;
     }
 
@@ -111,14 +119,6 @@ public class DonationPlanDTO {
 
     public void setOut(boolean out) {
         isOut = out;
-    }
-
-    public int getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(int contentType) {
-        this.contentType = contentType;
     }
 
     public int getDonation() {
