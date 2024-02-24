@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.donorsearch.backend.controller.dto.donation.DonationPlanDTO;
+import ru.donorsearch.backend.entity.DonationPlan;
 
 @Component
 public class DonationHttpClient {
@@ -79,5 +83,45 @@ public class DonationHttpClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<DonationPlan> getAllDonationPlans(String token) {
+        HttpGet httpGet = new HttpGet(DONATION_PLAN_URI);
+        httpGet.setHeader("Authoriation", token);
+
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            logger.info("Retrieve response from: {}", DONATION_PLAN_URI);
+            logger.info("Status Code: {}", statusCode);
+            if (statusCode == 200) {
+                List<DonationPlan> donationPlans = new ArrayList<>();
+                JsonNode rootNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
+                JsonNode resultsNode = rootNode.get("results");
+                if (resultsNode.isArray()) {
+                    for (JsonNode donationPlanNode : resultsNode) {
+                        DonationPlan donationPlan = mapJsonToDonationPlan(donationPlanNode);
+                        donationPlans.add(donationPlan);
+                    }
+                }
+                return donationPlans;
+            } else {
+                throw new BadRequestException("Invalid path variable");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private DonationPlan mapJsonToDonationPlan(JsonNode jsonNode) {
+        DonationPlan donationPlan = new DonationPlan();
+        donationPlan.setId(jsonNode.get("id").asLong());
+        donationPlan.setBloodStationId(jsonNode.get("blood_station_id").asInt());
+        donationPlan.setCityId(jsonNode.get("city_id").asInt());
+        donationPlan.setBloodClass(jsonNode.get("blood_class").asText());
+        donationPlan.setPlanDate(jsonNode.get("plan_date").asText());
+        donationPlan.setPaymentType(jsonNode.get("payment_type").asText());
+        donationPlan.setOut(jsonNode.get("is_out").asBoolean());
+
+        return donationPlan;
     }
 }

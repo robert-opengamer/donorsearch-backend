@@ -94,4 +94,18 @@ public class DonationPlan {
     public void setOut(boolean out) {
         isOut = out;
     }
+
+    @Override
+    public String toString() {
+        return "DonationPlan{" +
+                "id=" + id +
+                ", bloodStationId=" + bloodStationId +
+                ", cityId=" + cityId +
+                ", bloodClass='" + bloodClass + '\'' +
+                ", planDate='" + planDate + '\'' +
+                ", paymentType='" + paymentType + '\'' +
+                ", isOut=" + isOut +
+                ", user=" + user +
+                '}';
+    }
 }
