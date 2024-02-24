@@ -13,6 +13,7 @@ public class DonationPlan {
     private String planDate;
     private String paymentType;
     private boolean isOut;
+    private String title;
     private String address;
     private String workPhones;
     private String workTime;
@@ -23,7 +24,7 @@ public class DonationPlan {
 
     public DonationPlan(long id, int bloodStationId, int cityId,
                         String bloodClass, String planDate, String paymentType,
-                        boolean isOut, String address, String workPhones, String workTime) {
+                        boolean isOut, String title, String address, String workPhones, String workTime) {
         this.id = id;
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
@@ -31,6 +32,7 @@ public class DonationPlan {
         this.planDate = planDate;
         this.paymentType = paymentType;
         this.isOut = isOut;
+        this.title = title;
         this.address = address;
         this.workPhones = workPhones;
         this.workTime = workTime;
@@ -125,6 +127,15 @@ public class DonationPlan {
 
     public void setOut(boolean out) {
         isOut = out;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

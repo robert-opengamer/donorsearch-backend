@@ -60,6 +60,7 @@ public class DonationPlanService {
                 donationPlanDTO.getPlanDate(),
                 donationPlanDTO.getPaymentType(),
                 donationPlanDTO.isOut(),
+                donationPlanDTO.getStation().getTitle(),
                 parseAddress(donationPlanDTO.getStation()),
                 donationPlanDTO.getStation().getPhones(),
                 donationPlanDTO.getStation().getWorktime());
