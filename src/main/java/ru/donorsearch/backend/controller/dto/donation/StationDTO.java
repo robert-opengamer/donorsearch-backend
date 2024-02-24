@@ -16,16 +16,8 @@ public class StationDTO {
     private String phones;
     private String email;
     private String worktime;
-    @JsonProperty("without_registration")
-    private boolean withoutRegistration;
-    @JsonProperty("with_typing")
-    private boolean withTyping;
-    @JsonProperty("for_moscow")
-    private boolean forMoscow;
-    private boolean closed;
-    private int priority;
 
-    public StationDTO(int id, int cityId, CityDTO city, boolean hasBloodGroup, String bloodStatus, String title, String address, String site, String phones, String email, String worktime, boolean withoutRegistration, boolean withTyping, boolean forMoscow, boolean closed, int priority) {
+    public StationDTO(int id, int cityId, CityDTO city, boolean hasBloodGroup, String bloodStatus, String title, String address, String site, String phones, String email, String worktime) {
         this.id = id;
         this.cityId = cityId;
         this.city = city;
@@ -37,11 +29,6 @@ public class StationDTO {
         this.phones = phones;
         this.email = email;
         this.worktime = worktime;
-        this.withoutRegistration = withoutRegistration;
-        this.withTyping = withTyping;
-        this.forMoscow = forMoscow;
-        this.closed = closed;
-        this.priority = priority;
     }
 
     public StationDTO() {
@@ -133,45 +120,5 @@ public class StationDTO {
 
     public void setWorktime(String worktime) {
         this.worktime = worktime;
-    }
-
-    public boolean isWithoutRegistration() {
-        return withoutRegistration;
-    }
-
-    public void setWithoutRegistration(boolean withoutRegistration) {
-        this.withoutRegistration = withoutRegistration;
-    }
-
-    public boolean isWithTyping() {
-        return withTyping;
-    }
-
-    public void setWithTyping(boolean withTyping) {
-        this.withTyping = withTyping;
-    }
-
-    public boolean isForMoscow() {
-        return forMoscow;
-    }
-
-    public void setForMoscow(boolean forMoscow) {
-        this.forMoscow = forMoscow;
-    }
-
-    public boolean isClosed() {
-        return closed;
-    }
-
-    public void setClosed(boolean closed) {
-        this.closed = closed;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
     }
 }

@@ -46,17 +46,21 @@ public class DonationHttpClient {
         httpPost.setHeader("Content-Type", "application/json");
         httpPost.setHeader("Authorization", token);
 
+
+
         String json = objectMapper.writeValueAsString(request);
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(request));
         httpPost.setEntity(entity);
 
         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
+            String jsonResponse = EntityUtils.toString(response.getEntity());
             logger.info("Retrieve response from POST: {}", DONATION_PLAN_URI);
-            logger.info(json);
+            logger.info("request body: {}", json);
+            logger.info("response body: {}",jsonResponse);
             logger.info("Status Code: {}", statusCode);
             if (statusCode == 201) {
-                JsonNode jsonNode = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
+                JsonNode jsonNode = objectMapper.readTree(jsonResponse);
                 return jsonNode.get("id").asLong();
             } else {
                 throw new BadRequestException("Invalid request body");
