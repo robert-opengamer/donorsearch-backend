@@ -1,6 +1,8 @@
 package ru.donorsearch.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,9 @@ public class DonationPlanService {
 
     public ResponseEntity<StatusResponse> createDonationPlan(String token, DonationPlanDTO donationPlanDTO)
             throws UnsupportedEncodingException, JsonProcessingException {
+
+        donationPlanDTO.setPlanDate(convertDate(donationPlanDTO.getPlanDate()));
+
         User user = userRepo.findById(authHttpClient.getUserIdFromSession(token)).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
@@ -70,4 +75,11 @@ public class DonationPlanService {
     public ResponseEntity<StatusResponse> getDonationPlan(String token, DonationPlanResponse donationPlanResponse) {
 
     }*/
+
+    public String convertDate(String inputDate) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate date = LocalDate.parse(inputDate, inputFormatter);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(outputFormatter);
+    }
 }
