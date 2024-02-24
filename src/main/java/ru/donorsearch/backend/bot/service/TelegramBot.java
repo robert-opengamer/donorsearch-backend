@@ -99,12 +99,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             User user = donationPlan.getUser();
             String text =
-                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass() + '\n' + '\n'
+                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n'
                     + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
                     + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
                     + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
                     + "Номера телефонов: " + donationPlan.getWorkPhones()
-            );
+            ;
 
             sendMessage(user.getChatId(), text);
 
@@ -114,12 +114,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             User user = donationPlan.getUser();
             String text =
-                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass() + '\n' + '\n'
+                    "Приближающееся событие: " + "сдача" + " " + bloodTypes.get(donationPlan.getBloodClass()) + '\n' + '\n'
                             + "Дата: " + donationPlan.getPlanDate() + '\n' + '\n'
                             + "Адресс: " + donationPlan.getAddress() + '\n' + '\n'
                             + "Рабочие часы: " + donationPlan.getWorkTime() + '\n' + '\n'
                             + "Номера телефонов: " + donationPlan.getWorkPhones()
-                    );
+                    ;
 
             sendMessage(user.getChatId(), text);
 
