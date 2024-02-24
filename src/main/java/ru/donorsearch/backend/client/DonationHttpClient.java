@@ -15,8 +15,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.donorsearch.backend.controller.dto.donation.DonationPlanDTO;
 
+@Component
 public class DonationHttpClient {
 
     private final static Logger logger = LoggerFactory.getLogger(DonationHttpClient.class);
