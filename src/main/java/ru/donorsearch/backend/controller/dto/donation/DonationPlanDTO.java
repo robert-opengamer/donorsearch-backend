@@ -40,9 +40,11 @@ public class DonationPlanDTO {
 
     private int donation;
 
+    private String station;
+
     public DonationPlanDTO(int bloodStationId, int cityId, int objectId,
                                String bloodClass, String planDate, String paymentType,
-                               String status, boolean isOut, int donation) {
+                               String status, boolean isOut, int donation, String station) {
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
         this.objectId = objectId;
@@ -52,9 +54,18 @@ public class DonationPlanDTO {
         this.status = status;
         this.isOut = isOut;
         this.donation = donation;
+        this.station = station;
     }
 
     public DonationPlanDTO() {
+    }
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
     }
 
     public int getBloodStationId() {

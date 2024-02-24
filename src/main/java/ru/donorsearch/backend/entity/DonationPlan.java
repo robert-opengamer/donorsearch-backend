@@ -14,11 +14,13 @@ public class DonationPlan {
     private String paymentType;
     private boolean isOut;
 
+    private String station;
+
     @ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public DonationPlan(long id, int bloodStationId, int cityId, String bloodClass, String planDate, String paymentType, boolean isOut) {
+    public DonationPlan(long id, int bloodStationId, int cityId, String bloodClass, String planDate, String paymentType, boolean isOut, String station) {
         this.id = id;
         this.bloodStationId = bloodStationId;
         this.cityId = cityId;
@@ -26,9 +28,18 @@ public class DonationPlan {
         this.planDate = planDate;
         this.paymentType = paymentType;
         this.isOut = isOut;
+        this.station = station;
     }
 
     public DonationPlan() {
+    }
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
     }
 
     public long getId() {
